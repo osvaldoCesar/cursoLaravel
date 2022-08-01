@@ -9,6 +9,17 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+
+window.Vue.use(ElementUI);
+
+import Swal from 'sweetalert2';
+window.Swal = Swal;
+
+export const EventBus = new Vue();
+window.EventBus = EventBus;
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue

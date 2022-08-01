@@ -179,7 +179,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+// import axios from 'axios';
 
     export default {
         data() {
@@ -226,7 +226,6 @@ import axios from 'axios';
                 }
                 return pagesArray;
             }
-
         },
         methods: {
             limpiarCriteriosBsq(){

@@ -5,7 +5,7 @@
         <!-- /.navbar -->
 
         <!-- Main Sidebar Container -->
-        <Sidebar :ruta="ruta" :usuario="authUser" :listPermisos="listRolPermisosByUsuario"></Sidebar>
+        <Sidebar :ruta="ruta"></Sidebar>
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
