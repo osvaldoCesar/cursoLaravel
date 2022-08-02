@@ -52,7 +52,7 @@
                             <ul class="nav nav-pills position-reverse">
                                 <li class="nav-item">
                                     <router-link class="nav-link active" :to="'/usuario'">
-                                        <i class="fas fa-arrow-left"> Regresar</i>
+                                        <i class="fas fa-arrow-left"></i> Regresar
                                     </router-link>
                                 </li>
                             </ul>

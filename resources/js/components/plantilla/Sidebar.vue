@@ -11,17 +11,17 @@ import axios from 'axios';
             <!-- Sidebar user (optional) -->
             <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                 <div class="image">
-                    <!-- <template v-if="!usuario.file_id">
+                    <template v-if="!usuario.file_id">
                         <img :src="ruta + '/img/avatar.png'" class="img-circle elevation-2" :alt="usuario.fullname">
                     </template>
                     <template v-else>
                         <img :src="usuario.file.path" class="img-circle elevation-2" :alt="usuario.fullname" style="height: 34px !important">
-                    </template> -->
+                    </template>
                 </div>
                 <div class="info">
-                    <!-- <router-link class="d-block" :to="{name:'usuario.ver', params:{id: usuario.id}}">
+                    <router-link class="d-block" :to="{name:'usuario.ver', params:{id: usuario.id}}">
                         {{usuario.fullname}}
-                    </router-link> -->
+                    </router-link>
                 </div>
             </div>
 
@@ -37,92 +37,92 @@ import axios from 'axios';
             <nav class="mt-2">
                 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                     <li class="nav-item has-treeview menu-open">
-                        <!-- <template v-if="listPermisos.includes('dashboard.index')"> -->
+                        <template v-if="listPermisos.includes('dashboard.index')">
                             <router-link :to="'/'" class="nav-link active">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>Dashboard</p>
                             </router-link>
-                        <!-- </template> -->
+                        </template>
                     </li>
-                    <!-- <template v-if="listPermisos.includes('pedido.index', 'cliente.index')"> -->
+                    <template v-if="listPermisos.includes('pedido.index', 'cliente.index')">
                         <li class="nav-header">OPERACIONES</li>
                         <li class="nav-item">
-                            <!-- <template v-if="listPermisos.includes('pedido.index')"> -->
+                            <template v-if="listPermisos.includes('pedido.index')">
                                 <router-link :to="'/pedido'" class="nav-link">
                                     <i class="nav-icon fas fa-cash-register"></i>
                                     <p>Pedidos</p>
                                 </router-link>
-                            <!-- </template> -->
+                            </template>
                         </li>
                         <li class="nav-item">
-                            <!-- <template v-if="listPermisos.includes('cliente.index')"> -->
+                            <template v-if="listPermisos.includes('cliente.index')">
                                 <router-link :to="'/cliente'" class="nav-link">
                                     <i class="nav-icon fas fa-user-friends"></i>
                                     <p>Clientes</p>
                                 </router-link>
-                            <!-- </template> -->
+                            </template>
                         </li>
-                    <!-- </template> -->
+                    </template>
 
-                    <!-- <template v-if="listPermisos.includes('categoria.index', 'producto.index')"> -->
+                    <template v-if="listPermisos.includes('categoria.index', 'producto.index')">
                         <li class="nav-header">CONFIGURACIÓN</li>
                         <li class="nav-item">
-                            <!-- <template v-if="listPermisos.includes('categoria.index')"> -->
+                            <template v-if="listPermisos.includes('categoria.index')">
                                 <router-link :to="'/categoria'" class="nav-link">
                                     <i class="fas fa-sitemap nav-icon"></i>
                                     <p>Categorías</p>
                                 </router-link>
-                            <!-- </template> -->
+                            </template>
                         </li>
                         <li class="nav-item">
-                            <!-- <template v-if="listPermisos.includes('producto.index')"> -->
+                            <template v-if="listPermisos.includes('producto.index')">
                                 <router-link :to="'/producto'" class="nav-link">
                                     <i class="fas fa-apple-alt nav-icon"></i>
                                     <p>Productos</p>
                                 </router-link>
-                            <!-- </template> -->
+                            </template>
                         </li>
-                    <!-- </template> -->
+                    </template>
 
-                    <!-- <template v-if="listPermisos.includes('usuario.index', 'rol.index', 'permiso.index')"> -->
+                    <template v-if="listPermisos.includes('usuario.index', 'rol.index', 'permiso.index')">
                         <li class="nav-header">ADMINISTRACIÓN</li>
                         <li class="nav-item">
-                            <!-- <template v-if="listPermisos.includes('usuario.index')"> -->
+                            <template v-if="listPermisos.includes('usuario.index')">
                                 <router-link :to="'/usuario'" class="nav-link">
                                     <i class="nav-icon fas fa-users"></i>
                                     <p>Usuarios</p>
                                 </router-link>
-                            <!-- </template> -->
+                            </template>
                         </li>
                         <li class="nav-item">
-                            <!-- <template v-if="listPermisos.includes('rol.index')"> -->
+                            <template v-if="listPermisos.includes('rol.index')">
                                 <router-link :to="'/rol'" class="nav-link">
                                     <i class="nav-icon fas fa-unlock-alt"></i>
                                     <p>Roles</p>
                                 </router-link>
-                            <!-- </template> -->
+                            </template>
                         </li>
                         <li class="nav-item">
-                            <!-- <template v-if="listPermisos.includes('permiso.index')"> -->
+                            <template v-if="listPermisos.includes('permiso.index')">
                                 <router-link :to="'/permiso'" class="nav-link">
                                     <i class="nav-icon fas fa-key"></i>
                                     <p>Permisos</p>
                                 </router-link>
-                            <!-- </template> -->
+                            </template>
                         </li>
-                    <!-- </template> -->
+                    </template>
 
-                    <!-- <template v-if="listPermisos.includes('reporte.pedido.index')"> -->
+                    <template v-if="listPermisos.includes('reporte.pedido.index')">
                         <li class="nav-header">REPORTES</li>
                         <li class="nav-item">
-                            <!-- <template v-if="listPermisos.includes('reporte.pedido.index')"> -->
+                            <template v-if="listPermisos.includes('reporte.pedido.index')">
                                 <router-link :to="'/reporte'" class="nav-link">
                                     <i class="nav-icon fas fa-file-export"></i>
                                     <p>Pedidos</p>
                                 </router-link>
-                            <!-- </template> -->
+                            </template>
                         </li>
-                    <!-- </template> -->
+                    </template>
                 </ul>
             </nav>
         <!-- /.sidebar-menu -->

@@ -1,29 +1,27 @@
 <template>
     <div>
         <!-- Navbar -->
-        <Navbar :ruta="ruta"></Navbar>
+        <Navbar :ruta="ruta" :usuario="authUser" :listPermisos="listRolPermisosByUsuario"></Navbar>
         <!-- /.navbar -->
 
         <!-- Main Sidebar Container -->
-        <Sidebar :ruta="ruta"></Sidebar>
+        <Sidebar :ruta="ruta" :usuario="authUser" :listPermisos="listRolPermisosByUsuario"></Sidebar>
 
-        <!-- Content Wrapper. Contains page content -->
+        <!-- Contenido Principal del Sitio Web -->
         <div class="content-wrapper">
             <transition name="slide-fade" mode="out-in">
                 <router-view></router-view>
             </transition>
         </div>
-
-
         <!-- /.content-wrapper -->
-        <Footer></Footer>
 
+        <Footer></Footer>
 
         <!-- Control Sidebar -->
         <aside class="control-sidebar control-sidebar-dark">
             <!-- Control sidebar content goes here -->
         </aside>
-    <!-- /.control-sidebar -->
+        <!-- /.control-sidebar -->
     </div>
 </template>
 
