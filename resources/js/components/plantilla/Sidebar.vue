@@ -147,9 +147,18 @@ import axios from 'axios';
                     if (response.data.code == 204) {
                         this.$router.push({name: 'login'})
                         location.reload();
+                        sessionStorage.clear();
                         this.fullscreenLoading = false;
                     }
-                })
+                }).catch(error =>{
+                    console.log(error.response);
+                    if (error.response.status == 401) {
+                        this.$router.push({name: 'login'})
+                        location.reload();
+                        sessionStorage.clear();
+                        this.fullscreenLoading = false;
+                    }
+                });
 
             }
         },

@@ -13,9 +13,11 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-tools">
-                        <router-link class="btn btn-info btn-sm" :to="'/usuario/crear'">
-                            <i class="fas fa-plus-square"></i> Nuevo Usuario
-                        </router-link>
+                        <template v-if="listaRolPermisosByUsuario.includes('usuario.crear')">
+                            <router-link class="btn btn-info btn-sm" :to="{name: 'usuario.crear'}">
+                                <i class="fas fa-plus-square"></i> Nuevo Usuario
+                            </router-link>
+                        </template>
                     </div>
                 </div>
                 <div class="card-body">
@@ -129,24 +131,34 @@
                                         </template>
                                     </td>
                                     <td>
-                                        <router-link class="btn btn-flat btn-primary btn-sm" :to="{ name: 'usuario.ver', params: {id: item.id}}">
-                                            <i class="fas fa-folder"></i> Ver
-                                        </router-link>
+                                        <template v-if="listaRolPermisosByUsuario.includes('usuario.ver')">
+                                            <router-link class="btn btn-flat btn-primary btn-sm" :to="{ name: 'usuario.ver', params: {id: item.id}}">
+                                                <i class="fas fa-folder"></i> Ver
+                                            </router-link>
+                                        </template>
                                         <template v-if="item.state == 'A'">
-                                            <router-link  class="btn btn-flat btn-info btn-sm" :to="{ name: 'usuario.editar', params: {id: item.id}}">
-                                                <i class="fas fa-pencil-alt"></i> Editar
-                                            </router-link>
-                                            <router-link class="btn btn-flat btn-success btn-sm" :to="{ name: 'usuario.permiso', params: {id: item.id}}">
-                                                <i class="fas fa-key"></i> Permiso
-                                            </router-link>
-                                            <button class="btn btn-flat btn-danger btn-sm" @click.prevent="setCambiarEstadoUsuario(1, item.id)">
-                                                <i class="fas fa-trash"></i> Desactivar
-                                            </button>
+                                            <template v-if="listaRolPermisosByUsuario.includes('usuario.editar')">
+                                                <router-link  class="btn btn-flat btn-info btn-sm" :to="{ name: 'usuario.editar', params: {id: item.id}}">
+                                                    <i class="fas fa-pencil-alt"></i> Editar
+                                                </router-link>
+                                            </template>
+                                            <template v-if="listaRolPermisosByUsuario.includes('usuario.permiso')">
+                                                <router-link class="btn btn-flat btn-success btn-sm" :to="{ name: 'usuario.permiso', params: {id: item.id}}">
+                                                    <i class="fas fa-key"></i> Permiso
+                                                </router-link>
+                                            </template>
+                                            <template v-if="listaRolPermisosByUsuario.includes('usuario.desactivar')">
+                                                <button class="btn btn-flat btn-danger btn-sm" @click.prevent="setCambiarEstadoUsuario(1, item.id)">
+                                                    <i class="fas fa-trash"></i> Desactivar
+                                                </button>
+                                            </template>
                                         </template>
                                         <template v-else>
-                                            <button class="btn btn-flat btn-success btn-sm" @click.prevent="setCambiarEstadoUsuario(2, item.id)">
-                                                <i class="fas fa-check"></i> Activar
-                                            </button>
+                                            <template v-if="listaRolPermisosByUsuario.includes('usuario.activar')">
+                                                <button class="btn btn-flat btn-success btn-sm" @click.prevent="setCambiarEstadoUsuario(2, item.id)">
+                                                    <i class="fas fa-check"></i> Activar
+                                                </button>
+                                            </template>
                                         </template>
                                     </td>
                                 </tr>
@@ -195,6 +207,7 @@
                     {value: 'A', label: 'Activo'},
                     {value: 'I', label: 'Inactivo'}
                 ],
+                listaRolPermisosByUsuario: JSON.parse(sessionStorage.getItem('listRolPermisosByUsuario')),
                 pageNumber: 0,
                 perPage: 5,
                 fullscreenLoading: false,
@@ -251,7 +264,15 @@
                     this.inicializarPaginacion();
                     this.listUsuarios =  response.data;
                     this.fullscreenLoading = false;
-                })
+                }).catch(error =>{
+                    console.log(error.response);
+                    if (error.response.status == 401) {
+                        this.$router.push({name: 'login'})
+                        location.reload();
+                        sessionStorage.clear();
+                        this.fullscreenLoading = false;
+                    }
+                });
             },
             nextPage() {
                 this.pageNumber++;
@@ -290,6 +311,14 @@
                             })
                             this.getListarUsuarios();
                         });
+                    }
+                }).catch(error =>{
+                    console.log(error.response);
+                    if (error.response.status == 401) {
+                        this.$router.push({name: 'login'})
+                        location.reload();
+                        sessionStorage.clear();
+                        this.fullscreenLoading = false;
                     }
                 });
             }

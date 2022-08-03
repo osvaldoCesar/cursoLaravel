@@ -160,7 +160,15 @@ import axios from 'axios';
                 axios.get(ruta).then(response => {
                     this.listPermisos = response.data;
                     this.filterPermisosByRol();
-                })
+                }).catch(error =>{
+                    console.log(error.response);
+                    if (error.response.status == 401) {
+                        this.$router.push({name: 'login'})
+                        location.reload();
+                        sessionStorage.clear();
+                        this.fullscreenLoading = false;
+                    }
+                });
             },
             filterPermisosByRol(){
                 let me = this;
@@ -191,6 +199,14 @@ import axios from 'axios';
                 }).then(response => {
                     this.fullscreenLoading = false;
                     this.$router.push('/rol');
+                }).catch(error =>{
+                    console.log(error.response);
+                    if (error.response.status == 401) {
+                        this.$router.push({name: 'login'})
+                        location.reload();
+                        sessionStorage.clear();
+                        this.fullscreenLoading = false;
+                    }
                 });
             },
             validarRegistrarRolPermisos(){

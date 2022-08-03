@@ -177,7 +177,15 @@ import axios from 'axios';
                 axios.get(url).then(response => {
                     this.listRoles =  response.data;
                     this.fullscreenLoading = false;
-                })
+                }).catch(error =>{
+                    console.log(error.response);
+                    if (error.response.status == 401) {
+                        this.$router.push({name: 'login'})
+                        location.reload();
+                        sessionStorage.clear();
+                        this.fullscreenLoading = false;
+                    }
+                });
             },
             limpiarCriterios(){
                 this.fillCrearUsuario.cPrimerNombre  = '';
@@ -214,7 +222,15 @@ import axios from 'axios';
                     console.log( response );
                     var nIdFile =  response.data[0].nIdFile;
                     this.setGuardarUsuario(nIdFile);
-                })
+                }).catch(error =>{
+                    console.log(error.response);
+                    if (error.response.status == 401) {
+                        this.$router.push({name: 'login'})
+                        location.reload();
+                        sessionStorage.clear();
+                        this.fullscreenLoading = false;
+                    }
+                });
             },
             setGuardarUsuario(nIdFile){
                 var url = '/administracion/usuario/setRegistrarUsuario'
@@ -228,6 +244,14 @@ import axios from 'axios';
                     'oFotografia'       :       nIdFile,
                 }).then(response => {
                     this.setEditarRolByUsuario(response.data);
+                }).catch(error =>{
+                    console.log(error.response);
+                    if (error.response.status == 401) {
+                        this.$router.push({name: 'login'})
+                        location.reload();
+                        sessionStorage.clear();
+                        this.fullscreenLoading = false;
+                    }
                 });
             },
             setEditarRolByUsuario(nIdUsuario){
@@ -238,6 +262,14 @@ import axios from 'axios';
                 }).then(response => {
                     this.fullscreenLoading = false;
                     this.$router.push('/usuario');
+                }).catch(error =>{
+                    console.log(error.response);
+                    if (error.response.status == 401) {
+                        this.$router.push({name: 'login'})
+                        location.reload();
+                        sessionStorage.clear();
+                        this.fullscreenLoading = false;
+                    }
                 });
             },
             validarRegistroUsuario(){

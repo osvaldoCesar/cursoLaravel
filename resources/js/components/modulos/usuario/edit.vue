@@ -190,7 +190,15 @@ import axios from 'axios';
                     this.fillEditarUsuario.cCorreo         =  response.data[0].email;
 
                     this.fullscreenLoading = false;
-                })
+                }).catch(error =>{
+                    console.log(error.response);
+                    if (error.response.status == 401) {
+                        this.$router.push({name: 'login'})
+                        location.reload();
+                        sessionStorage.clear();
+                        this.fullscreenLoading = false;
+                    }
+                });
             },
             limpiarCriterios(){
                 this.fillEditarUsuario.cPrimerNombre  = '';
@@ -210,7 +218,23 @@ import axios from 'axios';
                 axios.get(url).then(response => {
                     this.listRoles =  response.data;
                     this.getRolByUsuario();
-                })
+                }).catch(error =>{
+                    console.log(error.response);
+                    if (error.response.status == 401) {
+                        this.$router.push({name: 'login'})
+                        location.reload();
+                        sessionStorage.clear();
+                        this.fullscreenLoading = false;
+                    }
+                }).catch(error =>{
+                    console.log(error.response);
+                    if (error.response.status == 401) {
+                        this.$router.push({name: 'login'})
+                        location.reload();
+                        sessionStorage.clear();
+                        this.fullscreenLoading = false;
+                    }
+                });
             },
             getRolByUsuario(){
                 var url = '/administracion/usuario/getRolByUsuario'
@@ -221,7 +245,15 @@ import axios from 'axios';
                 }).then(response => {
                     this.fillEditarUsuario.nIdRol = (response.data.length == 0) ? '' : response.data[0].nIdRol;
                     this.fullscreenLoading = false;
-                })
+                }).catch(error =>{
+                    console.log(error.response);
+                    if (error.response.status == 401) {
+                        this.$router.push({name: 'login'})
+                        location.reload();
+                        sessionStorage.clear();
+                        this.fullscreenLoading = false;
+                    }
+                });
             },
             getFile(e){
                 this.fillEditarUsuario.oFotografia = e.target.files[0];
@@ -246,7 +278,15 @@ import axios from 'axios';
                     console.log( response );
                     var nIdFile =  response.data[0].nIdFile;
                     this.setGuardarUsuario(nIdFile);
-                })
+                }).catch(error =>{
+                    console.log(error.response);
+                    if (error.response.status == 401) {
+                        this.$router.push({name: 'login'})
+                        location.reload();
+                        sessionStorage.clear();
+                        this.fullscreenLoading = false;
+                    }
+                });
             },
             setGuardarUsuario(nIdFile){
                 var url = '/administracion/usuario/setEditarUsuario'
@@ -261,7 +301,14 @@ import axios from 'axios';
                     'oFotografia'       :       nIdFile,
                 }).then(response => {
                     this.setEditarRolByUsuario();
-
+                }).catch(error =>{
+                    console.log(error.response);
+                    if (error.response.status == 401) {
+                        this.$router.push({name: 'login'})
+                        location.reload();
+                        sessionStorage.clear();
+                        this.fullscreenLoading = false;
+                    }
                 });
             },
             setEditarRolByUsuario(){
@@ -277,6 +324,14 @@ import axios from 'axios';
                         showConfirmButton: false,
                         timer: 1500
                     })
+                }).catch(error =>{
+                    console.log(error.response);
+                    if (error.response.status == 401) {
+                        this.$router.push({name: 'login'})
+                        location.reload();
+                        sessionStorage.clear();
+                        this.fullscreenLoading = false;
+                    }
                 });
             },
             validarRegistroUsuario(){

@@ -169,7 +169,15 @@ import axios from 'axios';
                     }
                 }).then(response => {
                     this.listPermisosByRolAsignado = response.data;
-                })
+                }).catch(error =>{
+                    console.log(error.response);
+                    if (error.response.status == 401) {
+                        this.$router.push({name: 'login'})
+                        location.reload();
+                        sessionStorage.clear();
+                        this.fullscreenLoading = false;
+                    }
+                });
             },
             getRolByUsuario(){
                 var url = '/administracion/usuario/getRolByUsuario'
@@ -180,7 +188,15 @@ import axios from 'axios';
                 }).then(response => {
                     this.fillPermiso.cNombreRol = (response.data.length == 0) ? '' : response.data[0].name;
                     this.fullscreenLoading = false;
-                })
+                }).catch(error =>{
+                    console.log(error.response);
+                    if (error.response.status == 401) {
+                        this.$router.push({name: 'login'})
+                        location.reload();
+                        sessionStorage.clear();
+                        this.fullscreenLoading = false;
+                    }
+                });
             },
             getListarPermisosByUsuario(){
                 var ruta = '/administracion/usuario/getListarPermisosByUsuario';
@@ -191,7 +207,15 @@ import axios from 'axios';
                 }).then(response => {
                     this.listPermisos = response.data;
                     this.filterPermisosByUsuario();
-                })
+                }).catch(error =>{
+                    console.log(error.response);
+                    if (error.response.status == 401) {
+                        this.$router.push({name: 'login'})
+                        location.reload();
+                        sessionStorage.clear();
+                        this.fullscreenLoading = false;
+                    }
+                });
             },
             filterPermisosByUsuario(){
                 let me = this;
@@ -221,18 +245,34 @@ import axios from 'axios';
                 }).then(response => {
                     this.getListarRolPermisosByUsuario();
 
+                }).catch(error =>{
+                    console.log(error.response);
+                    if (error.response.status == 401) {
+                        this.$router.push({name: 'login'})
+                        location.reload();
+                        sessionStorage.clear();
+                        this.fullscreenLoading = false;
+                    }
                 });
             },
             getListarRolPermisosByUsuario(){
                 var ruta = '/administracion/usuario/getListarRolPermisosByUsuario';
                 axios.get(ruta).then(response => {
                     this.listRolPermisosByUsuario = response.data;
-                    this.listRolPermisosByUsuarioFilter = [];
                     this.filterListarRolPermisosByUsuario();
-                })
+                }).catch(error =>{
+                    console.log(error.response);
+                    if (error.response.status == 401) {
+                        this.$router.push({name: 'login'})
+                        location.reload();
+                        sessionStorage.clear();
+                        this.fullscreenLoading = false;
+                    }
+                });
             },
             filterListarRolPermisosByUsuario(){
                 let me = this;
+                this.listRolPermisosByUsuarioFilter = [];
                 me.listRolPermisosByUsuario.map(function(x, y){
                     me.listRolPermisosByUsuarioFilter.push(x.slug);
                 });

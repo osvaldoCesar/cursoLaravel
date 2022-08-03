@@ -203,7 +203,15 @@ import { EventBus } from '../../../app';
                     this.getUsuarioVer(response.data[0]);
 
                     this.fullscreenLoading = false;
-                })
+                }).catch(error =>{
+                    console.log(error.response);
+                    if (error.response.status == 401) {
+                        this.$router.push({name: 'login'})
+                        location.reload();
+                        sessionStorage.clear();
+                        this.fullscreenLoading = false;
+                    }
+                });
             },
             getUsuarioEditar(data){
                 this.fillEditarUsuario.cPrimerNombre   =  data.firstname;
@@ -229,7 +237,15 @@ import { EventBus } from '../../../app';
                 }).then(response => {
                     this.fillVerUsuario.cNombreRol = (response.data.length == 0) ? '' : response.data[0].name;
                     this.fullscreenLoading = false;
-                })
+                }).catch(error =>{
+                    console.log(error.response);
+                    if (error.response.status == 401) {
+                        this.$router.push({name: 'login'})
+                        location.reload();
+                        sessionStorage.clear();
+                        this.fullscreenLoading = false;
+                    }
+                });
             },
             abrirModal(){
                 this.modalShow = !this.modalShow;
@@ -256,7 +272,15 @@ import { EventBus } from '../../../app';
                 axios.post(url, this.form, config).then(response =>{
                     var nIdFile =  response.data[0].nIdFile;
                     this.setGuardarUsuario(nIdFile);
-                })
+                }).catch(error =>{
+                    console.log(error.response);
+                    if (error.response.status == 401) {
+                        this.$router.push({name: 'login'})
+                        location.reload();
+                        sessionStorage.clear();
+                        this.fullscreenLoading = false;
+                    }
+                });
             },
             setGuardarUsuario(nIdFile){
                 var url = '/administracion/usuario/setEditarUsuario'
@@ -271,6 +295,14 @@ import { EventBus } from '../../../app';
                     'oFotografia'       :       nIdFile,
                 }).then(response => {
                     this.getRefrescarUsuarioAutenticado();
+                }).catch(error =>{
+                    console.log(error.response);
+                    if (error.response.status == 401) {
+                        this.$router.push({name: 'login'})
+                        location.reload();
+                        sessionStorage.clear();
+                        this.fullscreenLoading = false;
+                    }
                 });
             },
             getRefrescarUsuarioAutenticado(){
@@ -286,7 +318,15 @@ import { EventBus } from '../../../app';
                         showConfirmButton: false,
                         timer: 1500
                     })
-                })
+                }).catch(error =>{
+                    console.log(error.response);
+                    if (error.response.status == 401) {
+                        this.$router.push({name: 'login'})
+                        location.reload();
+                        sessionStorage.clear();
+                        this.fullscreenLoading = false;
+                    }
+                });
             },
             validarRegistroUsuario(){
                 this.error = 0;

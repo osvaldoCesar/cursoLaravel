@@ -123,7 +123,15 @@ import axios from 'axios';
                     this.fillEditarPermiso.cNombre  =   response.data[0].name;
                     this.fillEditarPermiso.cSlug    =   response.data[0].slug;
                     this.fullscreenLoading          =   false;
-                })
+                }).catch(error =>{
+                    console.log(error.response);
+                    if (error.response.status == 401) {
+                        this.$router.push({name: 'login'})
+                        location.reload();
+                        sessionStorage.clear();
+                        this.fullscreenLoading = false;
+                    }
+                });
             },
             setEditarPermiso(){
                 if (this.validaEditarPermisos()) {
@@ -145,6 +153,14 @@ import axios from 'axios';
                         showConfirmButton: false,
                         timer: 1500
                     })
+                }).catch(error =>{
+                    console.log(error.response);
+                    if (error.response.status == 401) {
+                        this.$router.push({name: 'login'})
+                        location.reload();
+                        sessionStorage.clear();
+                        this.fullscreenLoading = false;
+                    }
                 });
             },
             validaEditarPermisos(){
