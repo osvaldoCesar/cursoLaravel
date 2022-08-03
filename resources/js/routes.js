@@ -29,7 +29,19 @@ function verificarAcceso(to, from ,next){
 
 export const rutas = [
     // Login
-    {path: '/login', name: 'login', component: require('./components/modulos/authenticate/login').default},
+    {
+        path: '/login',
+        name: 'login',
+        component: require('./components/modulos/authenticate/login').default,
+        beforeEnter: (to, from, next) => {
+            let authUser = JSON.parse(sessionStorage.getItem('authUser'));
+            if (authUser) {
+                next({ name: 'dashboard.index'});
+            } else {
+                next();
+            }
+        }
+    },
 
     // Dashboard
     {path: '/', name: 'dashboard.index', component: require('./components/modulos/dashboard/index').default,
