@@ -50,7 +50,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/archivo/setRegistrarArchivo', "FilesController@setRegistrarArchivo");
 
     /* Categorías*/
+    // Listar
     Route::get("/configuracion/categoria/getListarCategorias", "Configuracion\CategoriaController@getListarCategorias");
+    // Crear
+    Route::post("/configuracion/categoria/setRegistrarCategoria", "Configuracion\CategoriaController@setRegistrarCategoria");
 });
 
 

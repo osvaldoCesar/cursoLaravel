@@ -52,8 +52,19 @@ export const rutas = [
         }
     },
 
-    // Categorías
+    /* Categorías */
+    // Index
     {path: '/categoria', name: 'categoria.index', component: require('./components/modulos/categoria/index').default,
+        beforeEnter: (to, from, next) => {
+            verificarAcceso(to, from ,next);
+        }
+    },
+
+    // Registrar
+    {
+        path: '/categoria/crear',
+        name: 'categoria.crear',
+        component: require('./components/modulos/categoria/create').default,
         beforeEnter: (to, from, next) => {
             verificarAcceso(to, from ,next);
         }
