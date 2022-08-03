@@ -82,6 +82,16 @@ export const rutas = [
         }
     },
 
+    // Editar
+    {
+        path: '/categoria/editar/:id',
+        name: 'categoria.editar',
+        component: require('./components/modulos/categoria/edit').default,
+        beforeEnter: (to, from, next) => {
+            verificarAcceso(to, from ,next);
+        },
+        props: true,
+    },
     // Productos
     {path: '/producto', name: 'producto.index', component: require('./components/modulos/producto/index').default,
         beforeEnter: (to, from, next) => {
