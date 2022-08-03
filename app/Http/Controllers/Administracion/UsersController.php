@@ -46,7 +46,8 @@ class UsersController extends Controller
         $cUsuario           =      $request->cUsuario;
         $cCorreo            =      $request->cCorreo;
         $cContrasena        =      Hash::make($request->cContrasena);
-        $oFotografia            =      $request->oFotografia;
+        $oFotografia        =      $request->oFotografia;
+        $nIdAuthUser        =      Auth::id();
 
         $cPrimerNombre      =      ($cPrimerNombre      ==      NULL) ? ($cPrimerNombre     =   '')     :   $cPrimerNombre;
         $cSegundoNombre     =      ($cSegundoNombre     ==      NULL) ? ($cSegundoNombre    =   '')     :   $cSegundoNombre;
@@ -56,7 +57,7 @@ class UsersController extends Controller
         $cContrasena        =      ($cContrasena        ==      NULL) ? ($cContrasena       =   '')     :   $cContrasena;
         $oFotografia        =      ($oFotografia        ==      NULL) ? ($oFotografia       =   NULL)   :   $oFotografia;
 
-        $rpta        =      DB::select('call sp_Usuario_setRegistrarUsuario(?, ?, ?, ?, ?, ?, ?)',
+        $rpta        =      DB::select('call sp_Usuario_setRegistrarUsuario(?, ?, ?, ?, ?, ?, ?, ?)',
                                                                     [
                                                                         $cPrimerNombre,
                                                                         $cSegundoNombre,
@@ -65,6 +66,7 @@ class UsersController extends Controller
                                                                         $cCorreo,
                                                                         $cContrasena,
                                                                         $oFotografia,
+                                                                        $nIdAuthUser
                                                                     ]);
         return $rpta[0]->nIdUsuario;
     }
@@ -79,6 +81,7 @@ class UsersController extends Controller
         $cUsuario           =      $request->cUsuario;
         $cCorreo            =      $request->cCorreo;
         $cContrasena        =      $request->cContrasena;
+        $nIdAuthUser        =      Auth::id();
         if ($cContrasena != NULL) {
             $cContrasena    =      Hash::make($request->cContrasena);
         }
@@ -102,7 +105,7 @@ class UsersController extends Controller
 
         $oFotografia        =      ($oFotografia        ==      NULL) ? ($oFotografia       =   NULL)   :   $oFotografia;
 
-        $rpta        =      DB::select('call sp_Usuario_setEditarUsuario(?, ?, ?, ?, ?, ?, ?, ?)',
+        $rpta        =      DB::select('call sp_Usuario_setEditarUsuario(?, ?, ?, ?, ?, ?, ?, ?, ?)',
                                                                     [
                                                                         $nIdUsuario,
                                                                         $cPrimerNombre,
@@ -112,6 +115,7 @@ class UsersController extends Controller
                                                                         $cCorreo,
                                                                         $cContrasena,
                                                                         $oFotografia,
+                                                                        $nIdAuthUser,
                                                                     ]);
     }
 
@@ -119,15 +123,17 @@ class UsersController extends Controller
         if(!$request->ajax()) return redirect('/');
 
         $nIdUsuario         =      $request->nIdUsuario;
-        $cEstado         =      $request->cEstado;
+        $cEstado            =      $request->cEstado;
+        $nIdAuthUser        =      Auth::id();
 
         $nIdUsuario   =      ($nIdUsuario   ==      NULL) ? ($nIdUsuario  =   0)     :   $nIdUsuario;
         $cEstado      =      ($cEstado      ==      NULL) ? ($cEstado     =   0)     :   $cEstado;
 
-        $rpta        =      DB::select('call sp_Usuario_setCambiarEstadoUsuario(?, ?)',
+        $rpta        =      DB::select('call sp_Usuario_setCambiarEstadoUsuario(?, ?, ?)',
                                                                     [
                                                                         $nIdUsuario,
                                                                         $cEstado,
+                                                                        $nIdAuthUser,
                                                                     ]);
 
     }

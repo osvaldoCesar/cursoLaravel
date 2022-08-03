@@ -21,7 +21,7 @@ Route::group(['middleware' => ['auth']], function () {
         return Auth::user()->load('file');
     });
 
-    // Usuarios
+    /* Usuarios*/
 
     Route::get("/administracion/usuario/getListarRolPermisosByUsuario", "Administracion\UsersController@getListarRolPermisosByUsuario");
     Route::get("/administracion/usuario/getListarUsuarios",  "Administracion\UsersController@getListarUsuarios");
@@ -35,19 +35,22 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/administracion/usuario/getListarPermisosByUsuario', "Administracion\UsersController@getListarPermisosByUsuario");
     Route::post('/administracion/usuario/setRegistrarPermisosByUsuario', "Administracion\UsersController@setRegistrarPermisosByUsuario");
 
-    // Roles
+    /* Roles */
     Route::get("/administracion/rol/getListarRoles", "Administracion\RolesController@getListarRoles");
     Route::get("/administracion/rol/getListarPermisosByRol", "Administracion\RolesController@getListarPermisosByRol");
     Route::post("/administracion/rol/setRegistrarRolPermisos", "Administracion\RolesController@setRegistrarRolPermisos");
     Route::post("/administracion/rol/setEditarRolPermisos", "Administracion\RolesController@setEditarRolPermisos");
 
-    // Permisos
+    /* Permisos */
     Route::get("/administracion/permiso/getListarPermisos", "Administracion\PermissionController@getListarPermisos");
     Route::post("/administracion/permiso/setRegistrarPermisos", "Administracion\PermissionController@setRegistrarPermisos");
     Route::post("/administracion/permiso/setEditarPermiso", "Administracion\PermissionController@setEditarPermiso");
 
-    // Archivos
+    /* Archivos */
     Route::post('/archivo/setRegistrarArchivo', "FilesController@setRegistrarArchivo");
+
+    /* Categorías*/
+    Route::get("/configuracion/categoria/getListarCategorias", "Configuracion\CategoriaController@getListarCategorias");
 });
 
 
