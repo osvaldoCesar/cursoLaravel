@@ -6,13 +6,32 @@
             <li class="nav-item">
                 <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
             </li>
-            <li class="nav-item d-none d-sm-inline-block">
-                <a href="#" class="nav-link">Home</a>
-            </li>
-            <li class="nav-item d-none d-sm-inline-block">
-                <a href="#" class="nav-link">Contact</a>
-            </li>
+            <template v-if="listPermisos.includes('dashboard.index')">
+                <li class="nav-item d-none d-sm-inline-block">
+                    <router-link class="nav-link" :to="{name: 'dashboard.index'}">Inicio</router-link>
+                </li>
+            </template>
+            <template v-if="listPermisos.includes('pedido.index')">
+                <li class="nav-item d-none d-sm-inline-block">
+                    <router-link class="nav-link" :to="{name: 'pedido.index'}">Pedido</router-link>
+                </li>
+            </template>
         </ul>
+        <form class="form-inline ml-3">
+            <div class="input-group input-group-sm">
+                <el-autocomplete
+                    class="inline-input"
+                    v-model="cBusqueda"
+                    :fetch-suggestions="querySearch"
+                    placeholder="Buscar..."
+                    :trigger-on-focus="true"
+                    size="small"
+                    @select="handleSelect">
+                    <i class="el-icon-search el-input__icon" slot="suffix">
+                    </i>
+                </el-autocomplete>
+            </div>
+        </form>
         <!-- Right navbar links -->
         <ul class="navbar-nav ml-auto">
             <!-- Navbar Search -->
@@ -137,7 +156,65 @@
 
 <script>
 export default {
-    props: ['ruta']
+    props: ['ruta', 'listPermisos', 'usuario'],
+    data() {
+        return {
+            cBusqueda: '',
+            links: [],
+            listRolPermisosByUsuario: [],
+            listRolPermisosByUsuarioFilter: []
+        }
+    },
+    mounted() {
+        EventBus.$on('notifyRolPermisosByUsuario', data => {
+            this.getListarRolPermisosByUsuario();
+        })
+        this.getListarRolPermisosByUsuario();
+    },
+    methods: {
+        querySearch(queryString, cb) {
+            var links = this.listRolPermisosByUsuarioFilter;
+            var results = queryString ? links.filter(this.createFilter(queryString)) : links;
+            // call callback function to return suggestions
+            cb(results);
+        },
+        createFilter(queryString) {
+            return (link) => {
+            return (link.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+            };
+        },
+        getListarRolPermisosByUsuario(){
+            var ruta = '/administracion/usuario/getListarRolPermisosByUsuario';
+            axios.get(ruta, {
+                params: {
+                    'nIdUsuario' : this.usuario.id
+                }
+            }).then(response => {
+                this.listRolPermisosByUsuario = response.data;
+                this.filterListarRolPermisosByUsuario();
+            })
+        },
+        filterListarRolPermisosByUsuario(){
+            let me = this;
+            me.listRolPermisosByUsuarioFilter = [];
+            me.listRolPermisosByUsuario.map(function(x, y){
+                if (x.slug.includes('index')) {
+                    me.listRolPermisosByUsuarioFilter.push({
+                        'value' :   x.name,
+                        'link'  :   x.slug
+                    });
+                }
+            });
+        },
+        handleSelect(item) {
+            if (this.$route.name != item.link) {
+                this.$router.push({name: item.link})
+                this.cBusqueda = ''
+            }else{
+                this.cBusqueda= ''
+            }
+        }
+    }
 }
 </script>
 
