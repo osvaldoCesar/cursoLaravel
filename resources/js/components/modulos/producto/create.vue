@@ -47,7 +47,7 @@
                                             <div class="form-group row">
                                                 <label class="col-md-3 col-form-label">Stock</label>
                                                 <div class="col-md-9">
-                                                    <el-input-number v-model="fillCrearProducto.cStock" controls-position="right" @keyup.enter="setRegistrarProducto" :min="1"></el-input-number>
+                                                    <el-input-number v-model="fillCrearProducto.nStock" controls-position="right" @keyup.enter="setRegistrarProducto" :min="1"></el-input-number>
                                                 </div>
                                             </div>
                                         </div>
@@ -119,7 +119,7 @@ import axios from 'axios';
                 fillCrearProducto: {
                     cNombre: '',
                     cDescripcion: '',
-                    cStock: 1,
+                    nStock: 1,
                     fPrecio: 1,
                     nIdCategoria: '',
                 },
@@ -144,7 +144,7 @@ import axios from 'axios';
             limpiarCriterios(){
                 this.fillCrearProducto.cNombre      =  '';
                 this.fillCrearProducto.cDescripcion =  '';
-                this.fillCrearProducto.cStock       =  1;
+                this.fillCrearProducto.nStock       =  1;
                 this.fillCrearProducto.fPrecio      =  1;
                 this.fillCrearProducto.nIdCategoria =  '';
             },
@@ -177,7 +177,7 @@ import axios from 'axios';
                 axios.post(url, {
                     'cNombre'       :  this.fillCrearProducto.cNombre,
                     'cDescripcion'  :  this.fillCrearProducto.cDescripcion,
-                    'cStock'        :  this.fillCrearProducto.cStock,
+                    'nStock'        :  this.fillCrearProducto.nStock,
                     'fPrecio'       :  this.fillCrearProducto.fPrecio,
                     'nIdCategoria'  :  this.fillCrearProducto.nIdCategoria,
                 }).then(response => {

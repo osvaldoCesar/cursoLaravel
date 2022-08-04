@@ -92,7 +92,7 @@ export const rutas = [
         },
         props: true,
     },
-    // Productos configuracion/producto/setRegistrarProducto
+    // Productos
     {path: '/producto', name: 'producto.index', component: require('./components/modulos/producto/index').default,
         beforeEnter: (to, from, next) => {
             verificarAcceso(to, from ,next);
@@ -106,6 +106,16 @@ export const rutas = [
         beforeEnter: (to, from, next) => {
             verificarAcceso(to, from ,next);
         }
+    },
+    // Editar
+    {
+        path: '/producto/editar/:id',
+        name: 'producto.editar',
+        component: require('./components/modulos/producto/edit').default,
+        beforeEnter: (to, from, next) => {
+            verificarAcceso(to, from ,next);
+        },
+        props: true,
     },
 
 
