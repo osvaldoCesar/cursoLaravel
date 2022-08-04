@@ -64,6 +64,14 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post("/configuracion/producto/setRegistrarProducto", "Configuracion\ProductsController@setRegistrarProducto");
     // Editar
     Route::post("/configuracion/producto/setEditarProducto", "Configuracion\ProductsController@setEditarProducto");
+
+    /* Pedidos */
+    // Listar
+    Route::get("/operacion/pedido/getListarPedidos", "Operacion\OrdersController@getListarPedidos");
+    // Crear
+    Route::post("/configuracion/producto/setRegistrarProducto", "Configuracion\ProductsController@setRegistrarProducto");
+    // Editar
+    Route::post("/configuracion/producto/setEditarProducto", "Configuracion\ProductsController@setEditarProducto");
 });
 
 
