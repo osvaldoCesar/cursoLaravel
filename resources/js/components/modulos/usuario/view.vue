@@ -106,7 +106,7 @@
                                         </div>
                                         <div class="form-group row">
                                             <div class="col-sm-12">
-                                                <button class="btn btn-flat btn-info btnWFullh" @click.prevent="setEditarUsuario" v-loading.fullscreen.lock="fullscreenLoading">Editar</button>
+                                                <button class="btn btn-flat btn-info btnFull" @click.prevent="setEditarUsuario" v-loading.fullscreen.lock="fullscreenLoading">Editar</button>
                                             </div>
                                         </div>
                                     </form>

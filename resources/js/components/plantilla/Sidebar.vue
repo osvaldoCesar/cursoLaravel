@@ -159,7 +159,6 @@ import axios from 'axios';
                         this.fullscreenLoading = false;
                     }
                 });
-
             }
         },
     }

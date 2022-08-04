@@ -50,8 +50,15 @@ export const rutas = [
         }
     },
 
-    // Pedidos
+    /* Pedidos */
+    // Index
     {path: '/pedido', name: 'pedido.index', component: require('./components/modulos/pedido/index').default,
+        beforeEnter: (to, from, next) => {
+            verificarAcceso(to, from ,next);
+        }
+    },
+    // Crear
+    {path: '/pedido/crear', name: 'pedido.crear', component: require('./components/modulos/pedido/create').default,
         beforeEnter: (to, from, next) => {
             verificarAcceso(to, from ,next);
         }
