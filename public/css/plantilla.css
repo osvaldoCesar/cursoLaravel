@@ -55,3 +55,7 @@
 .modal{
     background: #0000006b;
 }
+
+.el-input-number{
+    width: 100% !important;
+}

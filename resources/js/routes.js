@@ -92,12 +92,23 @@ export const rutas = [
         },
         props: true,
     },
-    // Productos
+    // Productos configuracion/producto/setRegistrarProducto
     {path: '/producto', name: 'producto.index', component: require('./components/modulos/producto/index').default,
         beforeEnter: (to, from, next) => {
             verificarAcceso(to, from ,next);
         }
     },
+    // Registrar
+    {
+        path: '/producto/crear',
+        name: 'producto.crear',
+        component: require('./components/modulos/producto/create').default,
+        beforeEnter: (to, from, next) => {
+            verificarAcceso(to, from ,next);
+        }
+    },
+
+
 
     // Usuarios
     {path: '/usuario', name: 'usuario.index', component: require('./components/modulos/usuario/index').default,

@@ -33,7 +33,7 @@
                                             <div class="form-group row">
                                                 <label class="col-md-3 col-form-label">Nombre</label>
                                                 <div class="col-md-9">
-                                                    <input type="text" class="form-control" v-model="fillBsqProducto.cNombre" @keyup.enter="getListarCategorias">
+                                                    <input type="text" class="form-control" v-model="fillBsqProducto.cNombre" @keyup.enter="getListarProductos">
                                                 </div>
                                             </div>
                                         </div>
@@ -41,7 +41,7 @@
                                             <div class="form-group row">
                                                 <label class="col-md-3 col-form-label">Descripción</label>
                                                 <div class="col-md-9">
-                                                    <input type="text" class="form-control" v-model="fillBsqProducto.cDescripcion" @keyup.enter="getListarCategorias">
+                                                    <input type="text" class="form-control" v-model="fillBsqProducto.cDescripcion" @keyup.enter="getListarProductos">
                                                 </div>
                                             </div>
                                         </div>
@@ -71,7 +71,7 @@
                 <div class="card-footer">
                     <div class="row">
                         <div class="col-md-4 offset-4">
-                            <button class="btn btn-flat btn-info btnWidth" @click.prevent="getListarCategorias" v-loading.fullscreen.lock="fullscreenLoading">Buscar</button>
+                            <button class="btn btn-flat btn-info btnWidth" @click.prevent="getListarProductos" v-loading.fullscreen.lock="fullscreenLoading">Buscar</button>
                             <button class="btn btn-flat btn-default btnWidth" @click.prevent="limpiarCriteriosBsq">Limpiar</button>
                         </div>
                     </div>
