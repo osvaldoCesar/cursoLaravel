@@ -49,13 +49,21 @@ Route::group(['middleware' => ['auth']], function () {
     /* Archivos */
     Route::post('/archivo/setRegistrarArchivo', "FilesController@setRegistrarArchivo");
 
-    /* Categorías*/
+    /* Categorías */
     // Listar
     Route::get("/configuracion/categoria/getListarCategorias", "Configuracion\CategoriaController@getListarCategorias");
     // Crear
     Route::post("/configuracion/categoria/setRegistrarCategoria", "Configuracion\CategoriaController@setRegistrarCategoria");
     // Editar
     Route::post("/configuracion/categoria/setEditarCategoria", "Configuracion\CategoriaController@setEditarCategoria");
+
+    /* Productos */
+    // Listar
+    Route::get("/configuracion/producto/getListarProductos", "Configuracion\ProductsController@getListarProductos");
+    // Crear
+    // Route::post("/configuracion/categoria/setRegistrarCategoria", "Configuracion\CategoriaController@setRegistrarCategoria");
+    // Editar
+    // Route::post("/configuracion/categoria/setEditarCategoria", "Configuracion\CategoriaController@setEditarCategoria");
 });
 
 

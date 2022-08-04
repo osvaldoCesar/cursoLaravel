@@ -70,7 +70,7 @@
                         <table class="table table-hover table-head-fixed text-nowrap">
                             <thead>
                                 <tr>
-                                    <th>Fotografía</th>
+                                    <th>Nombre</th>
                                     <th>Descripción</th>
                                     <th>Acciones</th>
                                 </tr>
