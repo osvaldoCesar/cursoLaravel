@@ -144,7 +144,7 @@ export const rutas = [
             verificarAcceso(to, from ,next);
         }
     },
-    {path: '/rol/crear', component: require('./components/modulos/rol/create').default,
+    {path: '/rol/crear', name: 'rol.crear', component: require('./components/modulos/rol/create').default,
         beforeEnter: (to, from, next) => {
             verificarAcceso(to, from ,next);
         }
@@ -165,7 +165,7 @@ export const rutas = [
             verificarAcceso(to, from ,next);
         }
     },
-    {path: '/permiso/crear', component: require('./components/modulos/permiso/create').default,
+    {path: '/permiso/crear', name: 'permiso.crear', component: require('./components/modulos/permiso/create').default,
         beforeEnter: (to, from, next) => {
             verificarAcceso(to, from ,next);
         }
