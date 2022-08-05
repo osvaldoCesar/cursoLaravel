@@ -59,3 +59,12 @@
 .el-input-number{
     width: 100% !important;
 }
+
+.el-autocomplete{
+    width: 100% !important;
+}
+
+.vs-input{
+    width: 100% !important;
+    border-radius: 1px !important;
+}

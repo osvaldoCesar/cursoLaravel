@@ -69,9 +69,17 @@ Route::group(['middleware' => ['auth']], function () {
     // Listar
     Route::get("/operacion/pedido/getListarPedidos", "Operacion\OrdersController@getListarPedidos");
     // Crear
-    Route::post("/configuracion/producto/setRegistrarProducto", "Configuracion\ProductsController@setRegistrarProducto");
+    // Route::post("/configuracion/producto/setRegistrarProducto", "Configuracion\ProductsController@setRegistrarProducto");
     // Editar
-    Route::post("/configuracion/producto/setEditarProducto", "Configuracion\ProductsController@setEditarProducto");
+    // Route::post("/configuracion/producto/setEditarProducto", "Configuracion\ProductsController@setEditarProducto");
+
+    /* Clientes */
+    // Listar
+    Route::get("/operacion/cliente/getListarClientes", "Operacion\CustomersController@getListarClientes");
+    // Crear
+    Route::post("/operacion/cliente/setRegistrarCliente", "Operacion\CustomersController@setRegistrarCliente");
+    // Editar
+    // Route::post("/configuracion/producto/setEditarProducto", "Configuracion\ProductsController@setEditarProducto");
 });
 
 

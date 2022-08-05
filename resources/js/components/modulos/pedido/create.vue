@@ -22,18 +22,43 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-md-4">
-                                <div class="card card-info">
+                                <div class="card" :class="(switchCliente) ? 'card-info' : 'card-success'">
                                     <div class="card-header">
-                                        <h3 class="card-title">Formulario Registrar Pedido</h3>
+                                        <h3 class="card-title">Formulario {{(switchCliente) ? 'Registrar' : 'Buscar'}} Cliente</h3>
                                     </div>
                                     <div class="card-body">
                                         <form role="form">
                                             <div class="row">
+                                                <div class="col-md-3">
+                                                    <vs-switch square v-model="switchCliente" @change="limpiarCriterios">
+                                                        <template #off>
+                                                            <i class="fas fa-plus-square"></i>
+                                                        </template>
+                                                        <template #on>
+                                                            <i class="fas fa-search"></i>
+                                                        </template>
+                                                    </vs-switch>
+                                                </div>
                                                 <div class="col-md-12">
                                                     <div class="form-group row">
                                                         <label class="col-md-12 col-form-label">Documento</label>
                                                         <div class="col-md-12">
-                                                            <input type="text" class="form-control" v-model="fillCrearRol.cDocumento" @keyup.enter="setRegistrarRolPermisos">
+                                                            <template v-if="switchCliente">
+                                                                <input type="text" class="form-control" v-model="fillCrearCliente.cDocumento" @keyup.enter="setRegistrarPedido">
+                                                            </template>
+                                                            <template v-else>
+                                                                <el-autocomplete
+                                                                    class="inline-input"
+                                                                    v-model="cBusqueda"
+                                                                    :fetch-suggestions="querySearch"
+                                                                    placeholder="Buscar..."
+                                                                    :trigger-on-focus="true"
+                                                                    size="medium"
+                                                                    @select="clientSelect">
+                                                                    <i class="el-icon-search el-input__icon" slot="suffix">
+                                                                    </i>
+                                                                </el-autocomplete>
+                                                            </template>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -41,7 +66,10 @@
                                                     <div class="form-group row">
                                                         <label class="col-md-12 col-form-label">Nombre</label>
                                                         <div class="col-md-12">
-                                                            <input type="text" class="form-control" v-model="fillCrearRol.cNombre" @keyup.enter="setRegistrarRolPermisos">
+                                                            <input type="text" class="form-control"
+                                                            v-model="fillCrearCliente.cNombre"
+                                                            @keyup.enter="setRegistrarPedido"
+                                                            :disabled="(switchCliente) ? false : true">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -49,7 +77,10 @@
                                                     <div class="form-group row">
                                                         <label class="col-md-12 col-form-label">Apellido</label>
                                                         <div class="col-md-12">
-                                                            <input type="text" class="form-control" v-model="fillCrearRol.cApellido" @keyup.enter="setRegistrarRolPermisos">
+                                                            <input type="text" class="form-control"
+                                                            v-model="fillCrearCliente.cApellido"
+                                                            @keyup.enter="setRegistrarPedido"
+                                                            :disabled="(switchCliente) ? false : true">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -57,7 +88,17 @@
                                                     <div class="form-group row">
                                                         <label class="col-md-12 col-form-label">Email</label>
                                                         <div class="col-md-12">
-                                                            <input type="email" class="form-control" v-model="fillCrearRol.cEmail" @keyup.enter="setRegistrarRolPermisos">
+                                                            <vs-input v-model="fillCrearCliente.cEmail"
+                                                                    placeholder="correo@gmail.com"
+                                                                    @keyup.enter="setRegistrarPedido"
+                                                                    :disabled="(switchCliente) ? false : true">
+                                                                <template v-if="validEmail" #message-success>Correo Electrónico válido</template>
+                                                                <template v-if="!validEmail && fillCrearCliente.cEmail !== ''" #message-danger>Correo Electrónico inválido</template>
+                                                            </vs-input>
+                                                            <!-- <input type="email" class="form-control"
+                                                            v-model="fillCrearCliente.cEmail"
+                                                            @keyup.enter="setRegistrarPedido"
+                                                            :disabled="(switchCliente) ? false : true"> -->
                                                         </div>
                                                     </div>
                                                 </div>
@@ -65,7 +106,10 @@
                                                     <div class="form-group row">
                                                         <label class="col-md-12 col-form-label">Teléfono</label>
                                                         <div class="col-md-12">
-                                                            <input type="tel" class="form-control" v-model="fillCrearRol.cTelefono" @keyup.enter="setRegistrarRolPermisos">
+                                                            <input type="tel" class="form-control"
+                                                            v-model="fillCrearCliente.cTelefono"
+                                                            @keyup.enter="setRegistrarPedido"
+                                                            :disabled="(switchCliente) ? false : true">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -74,7 +118,7 @@
                                     </div>
                                     <div class="card-footer">
                                         <div class="row">
-                                            <button class="btn btn-flat btn-info btnFull" @click.prevent="setRegistrarRolPermisos" v-loading.fullscreen.lock="fullscreenLoading">Registrar</button>
+                                            <button class="btn btn-flat btn-info btnFull" @click.prevent="setRegistrarPedido" v-loading.fullscreen.lock="fullscreenLoading">Registrar</button>
                                         </div>
                                     </div>
                                 </div>
@@ -145,10 +189,19 @@ import axios from 'axios';
     export default {
         data() {
             return {
-                fillCrearRol: {
+                fillCrearCliente: {
+                    nIdCliente: '',
+                    cDocumento: '',
                     cNombre: '',
-                    cSlug: '',
+                    cApellido: '',
+                    cEmail: '',
+                    cTelefono: '',
                 },
+                switchCliente: false,
+                cBusqueda: '',
+                links: [],
+                listClientes: [],
+                listClientesFilter: [],
                 listPermisos: [],
                 listPermisosFilter: [],
                 fullscreenLoading: false,
@@ -165,15 +218,70 @@ import axios from 'axios';
             }
         },
         computed: {
-
+            validEmail() {
+                return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.fillCrearCliente.cEmail)
+            }
         },
         mounted (){
             this.getListarPermisosByRol();
+            this.getListarClientes();
         },
         methods: {
+            querySearch(queryString, cb) {
+                var links = this.listClientesFilter;
+                var results = queryString ? links.filter(this.createFilter(queryString)) : links;
+                // call callback function to return suggestions
+                cb(results);
+            },
+            createFilter(queryString) {
+                return (link) => {
+                    return (link.value.toLowerCase().indexOf(queryString.toLowerCase()) != -1);
+                };
+            },
+            getListarClientes(){
+                var ruta = '/operacion/cliente/getListarClientes';
+                axios.get(ruta).then(response => {
+                    this.listClientes = response.data;
+                    this.filterListarClientes();
+                }).catch(error =>{
+                    console.log(error.response);
+                    if (error.response.status == 401) {
+                        this.$router.push({name: 'login'})
+                        location.reload();
+                        sessionStorage.clear();
+                        this.fullscreenLoading = false;
+                    }
+                });
+            },
+            filterListarClientes(){
+                let me = this;
+                me.listClientesFilter = [];
+                me.listClientes.map(function(x, y){
+                    me.listClientesFilter.push({
+                        'value' :   x.document + ' - ' + x.fullname,
+                        'link'  :   x.id
+                    });
+                });
+            },
+            clientSelect(item) {
+                let rpta = this.listClientes.filter(cliente => {
+                    return ((String(cliente.id)).indexOf(String(item.link)) != -1);
+                });
+                this.fillCrearCliente.nIdCliente    = rpta[0].id;
+                this.fillCrearCliente.cDocumento    = rpta[0].document;
+                this.fillCrearCliente.cNombre       = rpta[0].name;
+                this.fillCrearCliente.cApellido     = rpta[0].lastname;
+                this.fillCrearCliente.cEmail        = rpta[0].email;
+                this.fillCrearCliente.cTelefono     = rpta[0].phone;
+            },
             limpiarCriterios(){
-                this.fillCrearRol.cNombre  = '';
-                this.fillCrearRol.cSlug = '';
+                this.fillCrearCliente.nIdCliente    = '';
+                this.cBusqueda                      = '';
+                this.fillCrearCliente.cDocumento    = '';
+                this.fillCrearCliente.cNombre       = '';
+                this.fillCrearCliente.cApellido     = '';
+                this.fillCrearCliente.cEmail        = '';
+                this.fillCrearCliente.cTelefono     = '';
             },
             abrirModal(){
                 this.modalShow = !this.modalShow;
@@ -207,21 +315,29 @@ import axios from 'axios';
             marcarFila(index){
                 this.listPermisosFilter[index].checked = !this.listPermisosFilter[index].checked;
             },
-            setRegistrarRolPermisos(){
-                if (this.validarRegistrarRolPermisos()) {
+            setRegistrarPedido(){
+                if (this.validarRegistrarPedido()) {
                     this.modalShow = true;
                     return;
                 }
                 this.fullscreenLoading = true;
-                console.log(this.fillCrearRol.listPermisosFilter);
-                var url = '/administracion/rol/setRegistrarRolPermisos'
+
+                if (this.switchCliente) {
+                    this.setRegistrarCliente();
+                }
+            },
+            setRegistrarCliente(){
+                var url = '/operacion/cliente/setRegistrarCliente'
                 axios.post(url, {
-                    'cNombre'             :  this.fillCrearRol.cNombre,
-                    'cSlug'               :  this.fillCrearRol.cSlug,
-                    'listPermisosFilter'  :  this.listPermisosFilter
+                    'cDocumento'    :  this.fillCrearCliente.cDocumento,
+                    'cNombre'       :  this.fillCrearCliente.cNombre,
+                    'cApellido'     :  this.fillCrearCliente.cApellido,
+                    'cEmail'        :  this.fillCrearCliente.cEmail,
+                    'cTelefono'     :  this.fillCrearCliente.cTelefono,
                 }).then(response => {
                     this.fullscreenLoading = false;
-                    this.$router.push('/rol');
+                    console.log( response.data );
+                    this.getListarClientes();
                 }).catch(error =>{
                     console.log(error.response);
                     if (error.response.status == 401) {
@@ -232,26 +348,29 @@ import axios from 'axios';
                     }
                 });
             },
-            validarRegistrarRolPermisos(){
+            validarRegistrarPedido(){
                 this.error = 0;
                 this.mensajeError = [];
 
-                if (!this.fillCrearRol.cNombre) {
-                    this.mensajeError.push("El Nombre es un campo obligatorio");
-                }
-                if (!this.fillCrearRol.cSlug) {
-                    this.mensajeError.push("La URL Amigable es un campo obligatorio");
-                }
-
-                let contador = 0;
-                this.listPermisosFilter.map(function(x, y){
-                    if (x.checked == true) {
-                        contador++;
+                if (this.switchCliente) {
+                    if (!this.fillCrearCliente.cDocumento) {
+                        this.mensajeError.push("El Documento es un campo obligatorio");
                     }
-                })
-
-                if (contador == 0) {
-                    this.mensajeError.push("Debe seleccionar al menos un permiso");
+                    if (!this.fillCrearCliente.cNombre) {
+                        this.mensajeError.push("El Nombre es un campo obligatorio");
+                    }
+                    if (!this.fillCrearCliente.cApellido) {
+                        this.mensajeError.push("El apellido es un campo obligatorio");
+                    }
+                    if (this.fillCrearCliente.cEmail) {
+                        if (!this.validEmail) {
+                            this.mensajeError.push("El correo electrónico tiene un formato inválido");
+                        }
+                    }
+                }else{
+                    if (!this.fillCrearCliente.nIdCliente) {
+                        this.mensajeError.push("El Cliente es necesario cargar");
+                    }
                 }
 
                 if (this.mensajeError.length){
