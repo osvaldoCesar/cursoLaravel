@@ -118,7 +118,8 @@
                                     </div>
                                     <div class="card-footer">
                                         <div class="row">
-                                            <button class="btn btn-flat btn-info btnFull" @click.prevent="setRegistrarPedido" v-loading.fullscreen.lock="fullscreenLoading">Registrar</button>
+                                            <button v-if="fTotalPedido > 0 && listPedidos.length > 0" class="btn btn-flat btn-info btnFull" @click.prevent="setRegistrarPedido"
+                                                v-loading.fullscreen.lock="fullscreenLoading">Registrar</button>
                                         </div>
                                     </div>
                                 </div>
@@ -126,31 +127,83 @@
                             <div class="col-md-8">
                                 <div class="card card-info">
                                     <div class="card-header">
-                                        <h3 class="card-title">Listar Permisos</h3>
+                                        <h3 class="card-title">Seleccionar Productos</h3>
                                     </div>
                                     <div class="card-body table-responsive">
-                                        <template v-if="listPermisosFilter.length">
+                                        <vs-tooltip not-arrow right>
+                                            <vs-button
+                                            @click.prevent="agregarProducto"
+                                                square
+                                                icon
+                                                color="rgb(59,222,200)"
+                                                gradient>
+                                                <i class="fas fa-plus-square"></i>
+                                            </vs-button>
+                                            <template #tooltip>
+                                                Agregar Producto
+                                            </template>
+                                        </vs-tooltip>
+
+                                        <template v-if="listPedidos.length">
                                             <div class="scrollTable">
                                                 <table class="table table-hover table-head-fixed text-nowrap">
                                                     <thead>
                                                         <tr>
+                                                            <th>Artículo</th>
+                                                            <th>Stock</th>
+                                                            <th>Precio</th>
+                                                            <th>SubTotal</th>
                                                             <th>Acción</th>
-                                                            <th>Nombre</th>
-                                                            <th>Url amigable</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr v-for="(item, index) in listPermisosFilter" :key="index" @click.prevent="marcarFila(index)">
+                                                        <tr v-for="(item, index) in listPedidos" :key="index">
                                                             <td>
-                                                                <!-- Irán los checkbox para seleccionar los permisos que se le asignarán -->
-                                                                <el-checkbox v-model="item.checked"></el-checkbox>
+                                                                <el-select v-model="item.nIdProducto"
+                                                                    @change="obtenerProducto(item.nIdProducto, index)"
+                                                                    placeholder="Seleccione una Producto"
+                                                                    clearable
+                                                                    filterable>
+                                                                    <el-option
+                                                                        v-for="item in listProductos"
+                                                                        :key="item.id"
+                                                                        :label="item.name"
+                                                                        :value="item.id">
+                                                                    </el-option>
+                                                                </el-select>
                                                             </td>
-                                                            <td v-text="item.name"></td>
-                                                            <td v-text="item.slug"></td>
+                                                            <td>
+                                                                <el-input-number v-model="item.nStock"
+                                                                                controls-position="right"
+                                                                                :min="1"
+                                                                                :max="(item.nIdProducto) ? item.nStockFlag : 1"></el-input-number>
+                                                            </td>
+                                                            <td v-text="item.fPrecio"></td>
+                                                            <td>{{ item.fSubTotal = item.nStock * item.fPrecio }}</td>
+                                                            <td>
+                                                                <el-tooltip class="item" effect="dark" content="Remover Producto" placement="left">
+                                                                    <vs-button
+                                                                        @click.prevent="removerProducto(index)"
+                                                                        square
+                                                                        icon
+                                                                        danger
+                                                                        gradient>
+                                                                        <i class="fas fa-trash"></i>
+                                                                    </vs-button>
+                                                                </el-tooltip>
+                                                            </td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
                                             </div>
+                                            <el-row :gutter="20">
+                                                <el-col :span="16">
+                                                    <vs-input border v-model="cComentario" placeholder="Comentario" />
+                                                </el-col>
+                                                <el-col :span="8">
+                                                    <strong>Total = </strong> <strong style="color: red"> {{ fTotalPedido = totalPedido}} </strong>
+                                                </el-col>
+                                            </el-row>
                                         </template>
                                         <template v-else>
                                             <div class="callout callout-info">
@@ -186,6 +239,7 @@
 
 <script>
 import axios from 'axios';
+import { nextTick } from 'vue';
     export default {
         data() {
             return {
@@ -198,12 +252,16 @@ import axios from 'axios';
                     cTelefono: '',
                 },
                 switchCliente: false,
+
                 cBusqueda: '',
-                links: [],
                 listClientes: [],
                 listClientesFilter: [],
-                listPermisos: [],
-                listPermisosFilter: [],
+
+                listProductos: [],
+                listPedidos: [],
+                cComentario: '',
+                fTotalPedido: 0,
+
                 fullscreenLoading: false,
                 modalShow: false,
                 mostrarModal: {
@@ -220,11 +278,17 @@ import axios from 'axios';
         computed: {
             validEmail() {
                 return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.fillCrearCliente.cEmail)
+            },
+            totalPedido(){
+                return this.listPedidos.reduce(function(valorAnterior, valorActual){
+                    return valorAnterior + parseFloat(valorActual.fSubTotal)
+                },0)
             }
         },
         mounted (){
-            this.getListarPermisosByRol();
+            this.agregarProducto();
             this.getListarClientes();
+            this.getListarProductos();
         },
         methods: {
             querySearch(queryString, cb) {
@@ -243,6 +307,20 @@ import axios from 'axios';
                 axios.get(ruta).then(response => {
                     this.listClientes = response.data;
                     this.filterListarClientes();
+                }).catch(error =>{
+                    console.log(error.response);
+                    if (error.response.status == 401) {
+                        this.$router.push({name: 'login'})
+                        location.reload();
+                        sessionStorage.clear();
+                        this.fullscreenLoading = false;
+                    }
+                });
+            },
+            getListarProductos(){
+                var ruta = '/configuracion/producto/getListarProductos';
+                axios.get(ruta).then(response => {
+                    this.listProductos = response.data;
                 }).catch(error =>{
                     console.log(error.response);
                     if (error.response.status == 401) {
@@ -286,34 +364,80 @@ import axios from 'axios';
             abrirModal(){
                 this.modalShow = !this.modalShow;
             },
-            getListarPermisosByRol(){
-                var ruta = '/administracion/rol/getListarPermisosByRol';
-                axios.get(ruta).then(response => {
-                    this.listPermisos = response.data;
-                    this.filterPermisosByRol();
-                }).catch(error =>{
-                    console.log(error.response);
-                    if (error.response.status == 401) {
-                        this.$router.push({name: 'login'})
-                        location.reload();
-                        sessionStorage.clear();
-                        this.fullscreenLoading = false;
-                    }
-                });
-            },
-            filterPermisosByRol(){
+            agregarProducto(){
                 let me = this;
-                me.listPermisos.map(function(x, y){
-                    me.listPermisosFilter.push({
-                        'id'        :   x.id,
-                        'name'      :   x.name,
-                        'slug'      :   x.slug,
-                        'checked'   :   false
-                    });
-                });
+                if (this.listPedidos.length == 0) {
+                    this.listPedidos.push({
+                        'nIdProducto'   : '',
+                        'nStock'        : '',
+                        'nStockFlag'    : '',
+                        'fPrecio'       : '',
+                        'fSubTotal'     : '',
+                    })
+                }else{
+                    let contador = 0;
+                    this.listPedidos.map(function(x, y){
+                        if (!x.nIdProducto || !x.nStock || !x.fPrecio || !x.fSubTotal) {
+                            contador++;
+                            // Notificación
+                            const noti = me.$vs.notification({
+                                square: true,
+                                color: 'danger',
+                                position: 'bottom-right',
+                                title: 'Alerta',
+                                text: 'Debe completar la información de la fila = ' + (y+1)
+                            })
+                        }
+                    })
+                    if (contador == 0) {
+                        this.listPedidos.push({
+                            'nIdArticulo'   : '',
+                            'nStock'        : '',
+                            'nStockFlag'    : '',
+                            'fPrecio'       : '',
+                            'fSubTotal'     : '',
+                        })
+                    }
+                }
             },
-            marcarFila(index){
-                this.listPermisosFilter[index].checked = !this.listPermisosFilter[index].checked;
+            removerProducto(index){
+                this.$delete(this.listPedidos, index);
+            },
+            obtenerProducto(nIdProducto, index){
+                let me = this;
+
+                if (!nIdProducto) {
+                    Vue.nextTick(function(){
+                        me.listPedidos[index].nStock      =  '';
+                        me.listPedidos[index].nStockFlag  =  '';
+                        me.listPedidos[index].fPrecio     =  '';
+                    })
+                }
+                let contador = 0;
+                this.listPedidos.map(function(x, y){
+                    if (x.nIdProducto == nIdProducto && y != index) {
+                        contador++;
+                        // Notificación
+                        const noti = me.$vs.notification({
+                            square: true,
+                            color: 'danger',
+                            position: 'bottom-right',
+                            title: 'Alerta',
+                            text: 'El producto ya se encuentra en la fila = ' + (y+1)
+                        })
+                    }
+                })
+                if (contador == 0) {
+                    let rpta = this.listProductos.filter(producto => {
+                        return ((String(producto.id)).indexOf(String(nIdProducto)) != -1);
+                    });
+                    this.listPedidos[index].nStock      = rpta[0].stock;
+                    this.listPedidos[index].nStockFlag  = rpta[0].stock;
+                    this.listPedidos[index].fPrecio     = rpta[0].price;
+                }else{
+                    this.listPedidos[index].nIdProducto = '';
+                }
+
             },
             setRegistrarPedido(){
                 if (this.validarRegistrarPedido()) {
@@ -324,9 +448,12 @@ import axios from 'axios';
 
                 if (this.switchCliente) {
                     this.setRegistrarCliente();
+                } else {
+                    this.setGuardarPedido(this.fillCrearCliente.nIdCliente);
                 }
             },
             setRegistrarCliente(){
+                this.fullscreenLoading = true;
                 var url = '/operacion/cliente/setRegistrarCliente'
                 axios.post(url, {
                     'cDocumento'    :  this.fillCrearCliente.cDocumento,
@@ -335,9 +462,29 @@ import axios from 'axios';
                     'cEmail'        :  this.fillCrearCliente.cEmail,
                     'cTelefono'     :  this.fillCrearCliente.cTelefono,
                 }).then(response => {
+                    let nIdCliente = response.data[0].nIdCliente;
+                    this.setGuardarPedido(nIdCliente);
+                }).catch(error =>{
+                    console.log(error.response);
+                    if (error.response.status == 401) {
+                        this.$router.push({name: 'login'})
+                        location.reload();
+                        sessionStorage.clear();
+                        this.fullscreenLoading = false;
+                    }
+                });
+            },
+            setGuardarPedido(nIdCliente){
+
+                var url = '/operacion/pedido/setRegistrarPedido'
+                axios.post(url, {
+                    'nIdCliente'    : nIdCliente,
+                    'cComentario'   :  this.cComentario,
+                    'fTotalPedido'  :  this.fTotalPedido,
+                    'listPedido'     :  this.listPedidos,
+                }).then(response => {
                     this.fullscreenLoading = false;
-                    console.log( response.data );
-                    this.getListarClientes();
+                    this.$router.push('/pedido');
                 }).catch(error =>{
                     console.log(error.response);
                     if (error.response.status == 401) {
@@ -383,5 +530,28 @@ import axios from 'axios';
 </script>
 
 <style>
+    .el-row {
+        margin-bottom: 20px;
+    }
+    .el-col {
+        border-radius: 4px;
+    }
+    .bg-purple-dark {
+        background: #99a9bf;
+    }
+    .bg-purple {
+        background: #d3dce6;
+    }
+    .bg-purple-light {
+        background: #e5e9f2;
+    }
+    .grid-content {
+        border-radius: 4px;
+        min-height: 36px;
+    }
+    .row-bg {
+        padding: 10px 0;
+        background-color: #f9fafc;
+    }
 
 </style>

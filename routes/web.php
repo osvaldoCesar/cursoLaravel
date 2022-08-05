@@ -69,7 +69,7 @@ Route::group(['middleware' => ['auth']], function () {
     // Listar
     Route::get("/operacion/pedido/getListarPedidos", "Operacion\OrdersController@getListarPedidos");
     // Crear
-    // Route::post("/configuracion/producto/setRegistrarProducto", "Configuracion\ProductsController@setRegistrarProducto");
+    Route::post("/operacion/pedido/setRegistrarPedido", "Operacion\OrdersController@setRegistrarPedido");
     // Editar
     // Route::post("/configuracion/producto/setEditarProducto", "Configuracion\ProductsController@setEditarProducto");
 
