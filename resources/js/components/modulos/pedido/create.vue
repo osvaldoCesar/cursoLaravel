@@ -430,10 +430,22 @@ import { nextTick } from 'vue';
                 if (contador == 0) {
                     let rpta = this.listProductos.filter(producto => {
                         return ((String(producto.id)).indexOf(String(nIdProducto)) != -1);
-                    });
-                    this.listPedidos[index].nStock      = rpta[0].stock;
-                    this.listPedidos[index].nStockFlag  = rpta[0].stock;
-                    this.listPedidos[index].fPrecio     = rpta[0].price;
+                    })
+                    if (rpta[0].stock > 0) {
+                        this.listPedidos[index].nStock      = rpta[0].stock;
+                        this.listPedidos[index].nStockFlag  = rpta[0].stock;
+                        this.listPedidos[index].fPrecio     = rpta[0].price;
+                    }else{
+                        this.listPedidos[index].nIdProducto = '';
+                        // Notificación
+                        const noti = me.$vs.notification({
+                            square: true,
+                            color: 'danger',
+                            position: 'bottom-right',
+                            title: 'Alerta',
+                            text: 'El producto seleccionado no cuenta con stock disponible'
+                        })
+                    }
                 }else{
                     this.listPedidos[index].nIdProducto = '';
                 }
