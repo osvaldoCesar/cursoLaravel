@@ -113,7 +113,7 @@
                                     <td v-text="item.estado"></td>
                                     <td>
                                         <template v-if="listaRolPermisosByUsuario.includes('pedido.ver')">
-                                            <button class="btn btn-flat btn-info btn-sm">
+                                            <button class="btn btn-flat btn-info btn-sm" @click.prevent="setGenerarDocumento(item.id)">
                                                 <i class="far fa-file-pdf"></i> Ver PDF
                                             </button>
                                         </template>
@@ -226,6 +226,36 @@
                     this.inicializarPaginacion();
                     this.listPedidos =  response.data;
                     this.fullscreenLoading = false;
+                }).catch(error =>{
+                    console.log(error.response);
+                    if (error.response.status == 401) {
+                        this.$router.push({name: 'login'})
+                        location.reload();
+                        sessionStorage.clear();
+                        this.fullscreenLoading = false;
+                    }
+                });
+            },
+            setGenerarDocumento(nIdPedido){
+                const loading = this.$vs.loading({
+                    type: 'circles',
+                    color: '#AC8600',
+                    background: '#E5D9AF',
+                    text: 'Cargando...'
+                })
+
+                var config = {
+                    responseType: 'blob'
+                }
+                var url = '/operacion/pedido/setGenerarDocumento'
+                axios.post(url, {
+                        'nIdPedido'  : nIdPedido
+                }, config).then(response => {
+                    console.log(response.data);
+                    var oMyBlob = new Blob([response.data], {type : 'application/pdf'});
+                    var url = URL.createObjectURL(oMyBlob);
+                    window.open(url);
+                    loading.close();
                 }).catch(error =>{
                     console.log(error.response);
                     if (error.response.status == 401) {

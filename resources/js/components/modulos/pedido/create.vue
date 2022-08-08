@@ -95,10 +95,6 @@
                                                                 <template v-if="validEmail" #message-success>Correo Electrónico válido</template>
                                                                 <template v-if="!validEmail && fillCrearCliente.cEmail !== ''" #message-danger>Correo Electrónico inválido</template>
                                                             </vs-input>
-                                                            <!-- <input type="email" class="form-control"
-                                                            v-model="fillCrearCliente.cEmail"
-                                                            @keyup.enter="setRegistrarPedido"
-                                                            :disabled="(switchCliente) ? false : true"> -->
                                                         </div>
                                                     </div>
                                                 </div>
@@ -118,8 +114,7 @@
                                     </div>
                                     <div class="card-footer">
                                         <div class="row">
-                                            <button v-if="fTotalPedido > 0 && listPedidos.length > 0" class="btn btn-flat btn-info btnFull" @click.prevent="setRegistrarPedido"
-                                                v-loading.fullscreen.lock="fullscreenLoading">Registrar</button>
+                                            <button v-if="fTotalPedido > 0 && listPedidos.length > 0" class="btn btn-flat btn-info btnFull" @click.prevent="setRegistrarPedido">Registrar</button>
                                         </div>
                                     </div>
                                 </div>
@@ -263,6 +258,7 @@ import { nextTick } from 'vue';
                 fTotalPedido: 0,
 
                 fullscreenLoading: false,
+                loading: '',
                 modalShow: false,
                 mostrarModal: {
                     display: 'block',
@@ -456,7 +452,12 @@ import { nextTick } from 'vue';
                     this.modalShow = true;
                     return;
                 }
-                this.fullscreenLoading = true;
+                this.loading = this.$vs.loading({
+                    type: 'circles',
+                    color: '#AC8600',
+                    background: '#E5D9AF',
+                    text: 'Cargando...'
+                })
 
                 if (this.switchCliente) {
                     this.setRegistrarCliente();
@@ -487,7 +488,6 @@ import { nextTick } from 'vue';
                 });
             },
             setGuardarPedido(nIdCliente){
-
                 var url = '/operacion/pedido/setRegistrarPedido'
                 axios.post(url, {
                     'nIdCliente'    : nIdCliente,
@@ -495,9 +495,9 @@ import { nextTick } from 'vue';
                     'fTotalPedido'  :  this.fTotalPedido,
                     'listPedido'     :  this.listPedidos,
                 }).then(response => {
-                    this.fullscreenLoading = false;
-                    this.$router.push('/pedido');
+                    this.setGenerarDocumento(response.data);
                 }).catch(error =>{
+                    console.log( `Estoy dentro del error de que el documento no se creó "correctamente"` );
                     console.log(error.response);
                     if (error.response.status == 401) {
                         this.$router.push({name: 'login'})
@@ -506,6 +506,29 @@ import { nextTick } from 'vue';
                         this.fullscreenLoading = false;
                     }
                 });
+            },
+            setGenerarDocumento(nIdPedido){
+                var config = {
+                    responseType: 'blob'
+                }
+                var url = '/operacion/pedido/setGenerarDocumento'
+                axios.post(url, {
+                    'nIdPedido'       :   nIdPedido
+                }, config).then(response => {
+                    var oMyBlob = new Blob([response.data], {type : 'application/pdf'}); // the blob
+                    var url = URL.createObjectURL(oMyBlob);
+                    window.open(url);
+                    this.loading.close();
+                    this.$router.push('/pedido');
+                }).catch(error => {
+                    console.log(error);
+                    if (error.response.status == 401) {
+                        this.$router.push({name: 'login'});
+                        location.reload();
+                        sessionStorage.clear();
+                        this.fullscreenLoading = false;
+                    }
+                })
             },
             validarRegistrarPedido(){
                 this.error = 0;

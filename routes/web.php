@@ -70,8 +70,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get("/operacion/pedido/getListarPedidos", "Operacion\OrdersController@getListarPedidos");
     // Crear
     Route::post("/operacion/pedido/setRegistrarPedido", "Operacion\OrdersController@setRegistrarPedido");
-    // Editar
-    // Route::post("/configuracion/producto/setEditarProducto", "Configuracion\ProductsController@setEditarProducto");
+    // Generar un Documento
+    Route::post("/operacion/pedido/setGenerarDocumento", "Operacion\OrdersController@setGenerarDocumento");
 
     /* Clientes */
     // Listar
