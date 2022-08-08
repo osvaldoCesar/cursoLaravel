@@ -12,20 +12,18 @@
                 <p class="login-box-msg">Ingresa tus credenciales para Iniciar Sesión</p>
                 <form method="post">
                     <div class="input-group mb-3">
-                        <input type="email" class="form-control" @keyup.enter="login" v-model="fillLogin.cEmail" placeholder="Email">
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-envelope"></span>
-                            </div>
-                        </div>
+                        <vs-input :state="(error) ? 'danger' : ''" @keyup.enter="login" icon-after v-model="fillLogin.cEmail" placeholder="Correo electrónico">
+                            <template #icon>
+                            <i class='fas fa-envelope'></i>
+                            </template>
+                        </vs-input>
                     </div>
                     <div class="input-group mb-3">
-                        <input type="password" class="form-control" @keyup.enter="login" v-model="fillLogin.cContrasena" placeholder="Password">
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-lock"></span>
-                            </div>
-                        </div>
+                        <vs-input :state="(error) ? 'danger' : ''" type="password" icon-after @keyup.enter="login" v-model="fillLogin.cContrasena" placeholder="Password">
+                            <template #icon>
+                            <i class='fas fa-lock'></i>
+                            </template>
+                        </vs-input>
                     </div>
                 </form>
 
@@ -38,7 +36,7 @@
                 </div>
 
                 <div class="social-auth-links text-center mt-2 mb-3">
-                    <button class="btn btn-flat btn-block btn-danger" @click.prevent="login" v-loading.fullscreen.lock="fullscreenLoading">
+                    <button class="btn btn-flat btn-block btnIEE" @click.prevent="login">
                         Iniciar Sesión
                     </button>
                 </div>
@@ -71,7 +69,12 @@
                 if (this.validarLogin()){
                     return;
                 }
-                this.fullscreenLoading = true;
+                const loading = this.$vs.loading({
+                    type: 'circles',
+                    color: '#AC8600',
+                    background: '#E5D9AF',
+                    text: 'Cargando...'
+                })
                 var url = '/authenticate/login'
                 axios.post(url,{
                     'cEmail'       :  this.fillLogin.cEmail,
@@ -84,7 +87,9 @@
                      if (response.data.code == 200) {
                         this.getListarRolPermisosByUsuario(response.data.authUser);
                     }
-                    this.fullscreenLoading = false;
+                    setTimeout(() => {
+                        loading.close()
+                    }, 3000)
                 })
             },
             getListarRolPermisosByUsuario(authUser){
