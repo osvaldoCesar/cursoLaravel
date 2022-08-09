@@ -81,7 +81,7 @@ Route::group(['middleware' => ['auth']], function () {
     // Crear
     Route::post("/operacion/cliente/setRegistrarCliente", "Operacion\CustomersController@setRegistrarCliente");
     // Editar
-    // Route::post("/configuracion/producto/setEditarProducto", "Configuracion\ProductsController@setEditarProducto");
+    Route::post("/operacion/cliente/setEditarCliente", "Operacion\CustomersController@setEditarCliente");
 });
 
 

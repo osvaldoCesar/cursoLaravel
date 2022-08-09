@@ -84,9 +84,9 @@
                                     <td v-text="item.phone"></td>
                                     <td>
                                         <template v-if="listaRolPermisosByUsuario.includes('cliente.editar')">
-                                            <button class="btn btn-flat btn-info btn-sm" :to="{name: 'cliente.editar', params: {id: item.id}}">
+                                            <router-link  class="btn btn-flat btn-info btn-sm" :to="{ name: 'cliente.editar', params: {id: item.id}}">
                                                 <i class="fas fa-pencil-alt"></i> Editar
-                                            </button>
+                                            </router-link>
                                         </template>
                                     </td>
                                 </tr>
