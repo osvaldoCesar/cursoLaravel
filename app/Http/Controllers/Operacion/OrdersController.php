@@ -16,20 +16,20 @@ class OrdersController extends Controller
         $cNombre        =      $request->cNombre;
         $cDocumento     =      $request->cDocumento;
         $cPedido        =      $request->cPedido;
-        $nIdEstado      =      $request->nIdEstado;
+        $cEstado        =      $request->cEstado;
 
 
         $cNombre        =    ($cNombre      ==  NULL)  ?  ($cNombre     =   '')  :  $cNombre;
         $cDocumento     =    ($cDocumento   ==  NULL)  ?  ($cDocumento  =   '')  :  $cDocumento;
         $cPedido        =    ($cPedido      ==  NULL)  ?  ($cPedido     =   '')  :  $cPedido;
-        $nIdEstado      =    ($nIdEstado    ==  NULL)  ?  ($nIdEstado   =    0)  :  $nIdEstado;
+        $cEstado        =    ($cEstado      ==  NULL)  ?  ($cEstado     =   '')  :  $cEstado;
 
         $rpta        =      DB::select('call sp_Pedido_getListarPedidos(?, ?, ?, ?)',
                                                                     [
                                                                         $cNombre,
                                                                         $cDocumento,
                                                                         $cPedido,
-                                                                        $nIdEstado,
+                                                                        $cEstado,
                                                                     ]);
         return $rpta;
     }
