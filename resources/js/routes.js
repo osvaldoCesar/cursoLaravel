@@ -95,7 +95,6 @@ export const rutas = [
             verificarAcceso(to, from ,next);
         }
     },
-
     // Registrar
     {
         path: '/categoria/crear',
@@ -105,7 +104,6 @@ export const rutas = [
             verificarAcceso(to, from ,next);
         }
     },
-
     // Editar
     {
         path: '/categoria/editar/:id',
@@ -116,7 +114,8 @@ export const rutas = [
         },
         props: true,
     },
-    // Productos
+
+    /* Productos */
     {path: '/producto', name: 'producto.index', component: require('./components/modulos/producto/index').default,
         beforeEnter: (to, from, next) => {
             verificarAcceso(to, from ,next);
@@ -142,19 +141,19 @@ export const rutas = [
         props: true,
     },
 
-
-
-    // Usuarios
+    /* Usuarios */
     {path: '/usuario', name: 'usuario.index', component: require('./components/modulos/usuario/index').default,
         beforeEnter: (to, from, next) => {
             verificarAcceso(to, from ,next);
         }
     },
+    // Crear
     {path: '/usuario/crear', name: 'usuario.crear', component: require('./components/modulos/usuario/create').default,
         beforeEnter: (to, from, next) => {
             verificarAcceso(to, from ,next);
         }
     },
+    // Editar
     {
         path: '/usuario/editar/:id',
         name: 'usuario.editar',
@@ -183,7 +182,7 @@ export const rutas = [
         }
     },
 
-    // Roles
+    /* Roles */
     {path: '/rol', name: 'rol.index', component: require('./components/modulos/rol/index').default,
         beforeEnter: (to, from, next) => {
             verificarAcceso(to, from ,next);
@@ -226,9 +225,12 @@ export const rutas = [
     },
 
     // Reportes
-    {path: '/reporte', name: 'reporte.index', component: require('./components/modulos/reporte/index').default,
+    {
+        path: '/reporte',
+        name: 'reporte.pedido.index',
+        component: require('./components/modulos/reporte/index').default,
         beforeEnter: (to, from, next) => {
-            verificarAcceso(to, from ,next);
+            verificarAcceso(to, from, next);
         }
     },
 
