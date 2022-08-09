@@ -64,8 +64,15 @@ export const rutas = [
         }
     },
 
-    // Clientes
+    /* Clientes */
+    // Index
     {path: '/cliente', name: 'cliente.index', component: require('./components/modulos/cliente/index').default,
+        beforeEnter: (to, from, next) => {
+            verificarAcceso(to, from ,next);
+        }
+    },
+    // Crear
+    {path: '/cliente/crear', name: 'cliente.crear', component: require('./components/modulos/cliente/create').default,
         beforeEnter: (to, from, next) => {
             verificarAcceso(to, from ,next);
         }
