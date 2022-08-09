@@ -22,7 +22,6 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     /* Usuarios*/
-
     Route::get("/administracion/usuario/getListarRolPermisosByUsuario", "Administracion\UsersController@getListarRolPermisosByUsuario");
     Route::get("/administracion/usuario/getListarUsuarios",  "Administracion\UsersController@getListarUsuarios");
     Route::post("/administracion/usuario/setRegistrarUsuario", "Administracion\UsersController@setRegistrarUsuario");
@@ -84,6 +83,14 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post("/operacion/cliente/setRegistrarCliente", "Operacion\CustomersController@setRegistrarCliente");
     // Editar
     Route::post("/operacion/cliente/setEditarCliente", "Operacion\CustomersController@setEditarCliente");
+
+    /* Dashboard */
+    // Productos más vendidos
+    Route::get("/dashboard/getProductosMasVendidos","DashboardController@getProductosMasVendidos");
+    // Ventas por día
+    Route::get("/dashboard/getVentasPorDia","DashboardController@getVentasPorDia");
+
+
 });
 
 
