@@ -12,18 +12,18 @@ class CustomersController extends Controller
     public function getListarClientes(Request $request){
         if(!$request->ajax()) return redirect('/');
 
-        // $cNombre        =      $request->cNombre;
-        // $cDocumento     =      $request->cDocumento;
-        // $cPedido        =      $request->cPedido;
-        // $nIdEstado      =      $request->nIdEstado;
+        $cNombre        =      $request->cNombre;
+        $cDocumento     =      $request->cDocumento;
 
 
-        // $cNombre        =    ($cNombre      ==  NULL)  ?  ($cNombre     =   '')  :  $cNombre;
-        // $cDocumento     =    ($cDocumento   ==  NULL)  ?  ($cDocumento  =   '')  :  $cDocumento;
-        // $cPedido        =    ($cPedido      ==  NULL)  ?  ($cPedido     =   '')  :  $cPedido;
-        // $nIdEstado      =    ($nIdEstado    ==  NULL)  ?  ($nIdEstado   =    0)  :  $nIdEstado;
+        $cNombre        =    ($cNombre      ==  NULL)  ?  ($cNombre     =   '')  :  $cNombre;
+        $cDocumento     =    ($cDocumento   ==  NULL)  ?  ($cDocumento  =   '')  :  $cDocumento;
 
-        $rpta        =      DB::select('call sp_Cliente_getListarClientes');
+        $rpta        =      DB::select('call sp_Cliente_getListarClientes(?, ?)',
+                                                                            [
+                                                                                $cNombre,
+                                                                                $cDocumento,
+                                                                            ]);
         return $rpta;
     }
     public function setRegistrarCliente(Request $request){
