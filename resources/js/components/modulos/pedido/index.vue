@@ -110,7 +110,10 @@
                                     <td v-text="item.cliente"></td>
                                     <td v-text="item.total"></td>
                                     <td v-text="item.vendedor"></td>
-                                    <td v-text="item.estado"></td>
+                                    <td>
+                                        <span v-if="item.state == 'A'" class="badge badge-success" v-text="item.estado"></span>
+                                        <span v-else class="badge badge-danger" v-text="item.estado"></span>
+                                    </td>
                                     <td>
                                         <template v-if="listaRolPermisosByUsuario.includes('pedido.ver')">
                                             <button class="btn btn-flat btn-info btn-sm" @click.prevent="setGenerarDocumento(item.id)">
@@ -118,7 +121,7 @@
                                             </button>
                                         </template>
                                         <template v-if="listaRolPermisosByUsuario.includes('pedido.rechazar')">
-                                            <button class="btn btn-flat btn-danger btn-sm">
+                                            <button v-if="item.state == 'A'" class="btn btn-flat btn-danger btn-sm" @click.prevent="setCambiarEstadoPedido(1, item.id)">
                                                 <i class="fas fa-trash"></i> Rechazar
                                             </button>
                                         </template>
@@ -265,6 +268,41 @@
                         this.fullscreenLoading = false;
                     }
                 });
+            },
+            setCambiarEstadoPedido(op, id){
+                Swal.fire({
+                    title: '¿Está seguro de ' + ((op == 1) ? 'rechazar' : 'activar') + ' el pedido?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: ((op == 1) ? 'Si, rechazar' : 'Si, activar')
+                }).then((result) => {
+                    if (result.value) {
+                        // Aquí irá la confirmación del botón, petición al servidor
+                        this.fullscreenLoading = true;
+                        var url = '/operacion/pedido/setCambiarEstadoPedido';
+                        axios.post(url, {
+                            'nIdPedido': id,
+                            'cEstado': (op == 1) ? 'I' : 'A'
+                        }).then(response =>{
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Se ' + ((op == 1) ? 'rechazo' : 'activo') + ' el pedido',
+                                showConfirmButton: false,
+                                timer: 1500,
+                            })
+                            this.getListarPedidos();
+                        }).catch(error =>{
+                            if (error.response.status == 401) {
+                                this.$router.push({name: 'login'})
+                                location.reload();
+                                sessionStorage.clear();
+                                this.fullscreenLoading = false;
+                            }
+                        });
+                    }
+                })
             },
             nextPage() {
                 this.pageNumber++;

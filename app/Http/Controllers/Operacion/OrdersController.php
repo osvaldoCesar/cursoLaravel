@@ -104,4 +104,22 @@ class OrdersController extends Controller
         ]);
         return $pdf->download('invoice.pdf');
     }
+
+    public function setCambiarEstadoPedido(Request $request){
+        if(!$request->ajax()) return redirect('/');
+
+        $nIdPedido          =      $request->nIdPedido;
+        $cEstado            =      $request->cEstado;
+        $nIdAuthUser        =      Auth::id();
+
+        $nIdPedido  =   ($nIdPedido   ==   NULL) ? ($nIdPedido  =   0)   :   $nIdPedido;
+        $cEstado    =   ($cEstado     ==   NULL) ? ($cEstado    =   0)   :   $cEstado;
+
+        DB::select('call sp_Pedido_setCambiarEstadoPedido(?, ?, ?)',
+                                                                    [
+                                                                        $nIdPedido,
+                                                                        $cEstado,
+                                                                        $nIdAuthUser,
+                                                                    ]);
+    }
 }
