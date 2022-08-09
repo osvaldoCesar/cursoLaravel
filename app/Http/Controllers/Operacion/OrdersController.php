@@ -67,7 +67,7 @@ class OrdersController extends Controller
                                                                     $nIdPedido,
                                                                     $value['nIdProducto'],
                                                                     $value['nStock'],
-                                                                    $value['fSubTotal'],
+                                                                    $value['fPrecio'],
                                                                 ]);
                 }
             }
