@@ -13,7 +13,6 @@
         "axios": "^0.18",
         "bootstrap": "^5.2.0",
         "cross-env": "^5.1",
-        "element-ui": "^2.15.9",
         "jquery": "^3.2",
         "laravel-echo": "^1.8.0",
         "laravel-mix": "^4.0.7",
@@ -30,6 +29,7 @@
         "vuesax": "^4.0.1-alpha.25"
     },
     "dependencies": {
-        "chart.js": "^2.9.3"
+        "chart.js": "^2.9.3",
+        "element-ui": ">2.15.9 || 2.15.8"
     }
 }

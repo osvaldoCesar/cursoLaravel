@@ -93,8 +93,8 @@ Route::group(['middleware' => ['auth']], function () {
     /* Reportes */
     // Productos más vendidos
     Route::get("/reporte/pedido/getListarPedidos","ReportesController@getListarPedidos");
-    // Ventas por día
-    // Route::get("/dashboard/getVentasPorDia","DashboardController@getVentasPorDia");
+    // Exportar a excel
+    Route::get("/reporte/pedido/export","ReportesController@export");
 
 
 });

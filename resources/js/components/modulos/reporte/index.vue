@@ -258,9 +258,9 @@
             },
             setGenerarDocumento(){
                 const loading = this.$vs.loading({
-                    type: 'square',
-                    color: '#D5397B',
-                    background: '#FFFFFF',
+                    type: 'circles',
+                    color: '#AC8600',
+                    background: '#E5D9AF',
                     text: 'Cargando...'
                 })
 
