@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Administracion;
 
+use App\Events\Logout;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-// use App\Http\Controllers\Administracion\UsersController;
 
 class UsersController extends Controller
 {
@@ -135,7 +135,9 @@ class UsersController extends Controller
                                                                         $cEstado,
                                                                         $nIdAuthUser,
                                                                     ]);
-
+        if ($cEstado == 'I') {
+            broadcast(new logout($nIdUsuario));
+        }
     }
 
     public function setEditarRolByUsuario(Request $request){
