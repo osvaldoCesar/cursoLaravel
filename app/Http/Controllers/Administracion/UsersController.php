@@ -129,7 +129,7 @@ class UsersController extends Controller
         $nIdUsuario   =      ($nIdUsuario   ==      NULL) ? ($nIdUsuario  =   0)     :   $nIdUsuario;
         $cEstado      =      ($cEstado      ==      NULL) ? ($cEstado     =   0)     :   $cEstado;
 
-        $rpta        =      DB::select('call sp_Usuario_setCambiarEstadoUsuario(?, ?, ?)',
+        DB::select('call sp_Usuario_setCambiarEstadoUsuario(?, ?, ?)',
                                                                     [
                                                                         $nIdUsuario,
                                                                         $cEstado,

@@ -142,7 +142,7 @@ import axios from 'axios';
         mounted() {
             Echo.private(`logout.user.${this.usuario.id}`)
                 .listen('Logout', (e) => {
-                    console.log(e)
+                    // console.log(e)
                     this.logout();
                 });
         },

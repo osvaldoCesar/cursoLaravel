@@ -45,7 +45,7 @@
             this.listRolPermisosByUsuario   =   JSON.parse(sessionStorage.getItem('listRolPermisosByUsuario'));
 
             EventBus.$on('verifyAuthenticatedUser', data => {
-                console.log('Evento ejecutado desde el Componente App.vue');
+                // console.log('Evento ejecutado desde el Componente App.vue');
                 // console.log(data);
                 this.authUser = data;
             })
